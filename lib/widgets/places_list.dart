@@ -59,6 +59,7 @@ class PlacesList extends ConsumerWidget {
       secondChild: SizedBox(
         height: availableHeight,
         child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: places.length,
           itemBuilder: (ctx, index) => Dismissible(
             key: ValueKey(places[index]),
@@ -74,8 +75,7 @@ class PlacesList extends ConsumerWidget {
               ),
             ),
             child: ListTile(
-              minLeadingWidth: 24,
-              horizontalTitleGap: 24,
+              horizontalTitleGap: 16,
               minVerticalPadding: 0,
               minTileHeight: 0,
               contentPadding: const EdgeInsets.symmetric(
@@ -88,6 +88,9 @@ class PlacesList extends ConsumerWidget {
                   fontSize: 20,
                   color: theme.colorScheme.onSurface,
                 ),
+              ),
+              leading: CircleAvatar(
+                backgroundImage: FileImage(places[index].image),
               ),
               onTap: () => openPlaceDetails(places[index]),
             ),

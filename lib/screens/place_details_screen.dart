@@ -8,18 +8,22 @@ class PlaceDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(place.title),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
       ),
-      body: Center(
-        child: Text(place.title,
-            style: theme.textTheme.titleMedium!.copyWith(
-              fontSize: 24,
-              color: theme.colorScheme.onSurface,
-            )),
+      body: Stack(
+        children: [
+          Image.file(
+            place.image,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_favorite_places_app/models/place.dart';
 import 'package:flutter_favorite_places_app/providers/places_provider.dart';
+import 'package:flutter_favorite_places_app/widgets/image_input.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddPlaceScreen extends ConsumerStatefulWidget {
@@ -13,15 +16,24 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _formKey = GlobalKey<FormState>();
   String _title = '';
+  File? _image;
 
   void _saveForm() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _image != null) {
       _formKey.currentState!.save();
-      ref.read(placesProvider.notifier).addPlace(Place(title: _title));
-      _formKey.currentState!.reset();
+
+      ref.read(placesProvider.notifier).addPlace(
+            Place(
+              title: _title,
+              image: _image!,
+            ),
+          );
+
       Navigator.of(context).pop();
     }
   }
+
+  void _selectImage(File image) => _image = image;
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +53,15 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
             children: [
               TextFormField(
                 style: TextStyle(color: cScheme.onSurface),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Title',
-                  prefixIcon: Icon(Icons.label),
+                  prefixIcon: const Icon(Icons.label),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(16),
-                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: cScheme.onSurface),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 validator: (value) {
@@ -61,6 +75,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
                 },
                 onSaved: (value) => _title = value!,
               ),
+              ImageInput(onSelectImage: _selectImage),
               ElevatedButton.icon(
                 icon: Icon(Icons.add),
                 label: Text('Add Place'),
