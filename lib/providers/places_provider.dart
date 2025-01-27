@@ -13,7 +13,7 @@ class PlacesNotifier extends StateNotifier<List<Place>> {
   }
 
   void revertPlaceRemoval(Place place, int index) {
-    state = state..insert(index, place);
+    state = [...state]..insert(index, place);
   }
 }
 

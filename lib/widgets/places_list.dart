@@ -10,7 +10,6 @@ class PlacesList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final places = ref.watch(placesProvider);
-    final notifiers = ref.watch(placesProvider.notifier);
 
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
@@ -24,6 +23,7 @@ class PlacesList extends ConsumerWidget {
     }
 
     void onRemove(Place place, int index) {
+      final notifiers = ref.read(placesProvider.notifier);
       notifiers.removePlace(place);
 
       ScaffoldMessenger.of(context).clearSnackBars();
