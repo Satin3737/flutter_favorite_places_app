@@ -84,8 +84,6 @@ class _ImageInputState extends State<ImageInput> {
       child: AspectRatio(
         aspectRatio: 16 / 9,
         child: Container(
-          width: double.infinity,
-          height: 250,
           alignment: Alignment.center,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(

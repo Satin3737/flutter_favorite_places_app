@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_favorite_places_app/models/place.dart';
+import 'package:flutter_favorite_places_app/models/place_location.dart';
 import 'package:flutter_favorite_places_app/providers/places_provider.dart';
 import 'package:flutter_favorite_places_app/widgets/image_input.dart';
+import 'package:flutter_favorite_places_app/widgets/location_input.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddPlaceScreen extends ConsumerStatefulWidget {
@@ -17,15 +19,19 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _formKey = GlobalKey<FormState>();
   String _title = '';
   File? _image;
+  PlaceLocation? _location;
 
   void _saveForm() {
-    if (_formKey.currentState!.validate() && _image != null) {
+    if (_formKey.currentState!.validate() &&
+        _image != null &&
+        _location != null) {
       _formKey.currentState!.save();
 
       ref.read(placesProvider.notifier).addPlace(
             Place(
               title: _title,
               image: _image!,
+              location: _location!,
             ),
           );
 
@@ -34,6 +40,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   }
 
   void _selectImage(File image) => _image = image;
+  void _selectLocation(PlaceLocation location) => _location = location;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +56,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
         child: Form(
           key: _formKey,
           child: Column(
-            spacing: 32,
+            spacing: 24,
             children: [
               TextFormField(
                 style: TextStyle(color: cScheme.onSurface),
@@ -76,6 +83,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
                 onSaved: (value) => _title = value!,
               ),
               ImageInput(onSelectImage: _selectImage),
+              LocationInput(onSelectLocation: _selectLocation),
               ElevatedButton.icon(
                 icon: Icon(Icons.add),
                 label: Text('Add Place'),
