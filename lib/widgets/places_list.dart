@@ -10,7 +10,6 @@ class PlacesList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final places = ref.watch(placesProvider);
-
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
     final appBarHeight = AppBar().preferredSize.height;
@@ -82,15 +81,29 @@ class PlacesList extends ConsumerWidget {
                 horizontal: 16,
                 vertical: 16,
               ),
-              title: Text(
-                places[index].title,
-                style: theme.textTheme.titleMedium!.copyWith(
-                  fontSize: 20,
-                  color: theme.colorScheme.onSurface,
+              title: Hero(
+                tag: '${places[index].id}-title',
+                child: Text(
+                  places[index].title,
+                  style: theme.textTheme.titleMedium!.copyWith(
+                    fontSize: 20,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
-              leading: CircleAvatar(
-                backgroundImage: FileImage(places[index].image),
+              subtitle: Text(
+                places[index].location.address,
+                style: theme.textTheme.bodySmall!.copyWith(
+                  fontSize: 12,
+                  color: theme.colorScheme.onSecondaryContainer,
+                ),
+              ),
+              leading: Hero(
+                tag: places[index].id,
+                child: CircleAvatar(
+                  radius: 24,
+                  backgroundImage: FileImage(places[index].image),
+                ),
               ),
               onTap: () => openPlaceDetails(places[index]),
             ),

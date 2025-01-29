@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_favorite_places_app/helper/maps_helper.dart';
 import 'package:flutter_favorite_places_app/models/place_location.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-
-const googleMapsApiKey = 'key';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key, required this.onSelectLocation});
@@ -55,9 +54,7 @@ class _LocationInputState extends State<LocationInput> {
       return;
     }
 
-    final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleMapsApiKey');
-
+    final url = MapsHelper.getMapApiUri(latitude, longitude);
     final response = await http.get(url);
     final resData = jsonDecode(response.body);
     final address = resData['results'][0]['formatted_address'];
@@ -85,6 +82,15 @@ class _LocationInputState extends State<LocationInput> {
         color: theme.colorScheme.onSurface,
       ),
     );
+
+    if (_placeLocation != null) {
+      previewContent = Image.network(
+        MapsHelper.getLocationImage(_placeLocation!),
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
+      );
+    }
 
     if (_isGettingLocation) {
       previewContent = const Center(
