@@ -1,5 +1,5 @@
 class PlaceLocation {
-  PlaceLocation({
+  const PlaceLocation({
     required this.latitude,
     required this.longitude,
     required this.address,

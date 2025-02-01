@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_favorite_places_app/models/place.dart';
 import 'package:flutter_favorite_places_app/models/place_location.dart';
 import 'package:flutter_favorite_places_app/providers/places_provider.dart';
 import 'package:flutter_favorite_places_app/widgets/image_input.dart';
@@ -28,11 +27,9 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
       _formKey.currentState!.save();
 
       ref.read(placesProvider.notifier).addPlace(
-            Place(
-              title: _title,
-              image: _image!,
-              location: _location!,
-            ),
+            title: _title,
+            image: _image!,
+            location: _location!,
           );
 
       Navigator.of(context).pop();

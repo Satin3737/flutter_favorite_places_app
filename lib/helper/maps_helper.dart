@@ -3,6 +3,12 @@ import 'package:flutter_favorite_places_app/models/place_location.dart';
 class MapsHelper {
   static final String _googleMapsApiKey = 'key';
 
+  static const PlaceLocation defaultLocation = PlaceLocation(
+    latitude: 37.422,
+    longitude: -122.084,
+    address: 'Googleplex',
+  );
+
   static Uri getMapApiUri(double lat, double lng) {
     return Uri.parse(
       'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$_googleMapsApiKey',

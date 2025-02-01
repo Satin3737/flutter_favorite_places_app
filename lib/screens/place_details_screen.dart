@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_favorite_places_app/helper/maps_helper.dart';
 import 'package:flutter_favorite_places_app/models/place.dart';
+import 'package:flutter_favorite_places_app/screens/map_screen.dart';
 
 class PlaceDetailsScreen extends StatelessWidget {
   const PlaceDetailsScreen({super.key, required this.place});
@@ -9,6 +10,15 @@ class PlaceDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void showMap() {
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+        return MapScreen(
+          location: place.location,
+          isSelecting: false,
+        );
+      }));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(place.title),
@@ -34,10 +44,13 @@ class PlaceDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 96,
-                  backgroundImage: NetworkImage(
-                    MapsHelper.getLocationImage(place.location),
+                GestureDetector(
+                  onTap: showMap,
+                  child: CircleAvatar(
+                    radius: 96,
+                    backgroundImage: NetworkImage(
+                      MapsHelper.getLocationImage(place.location),
+                    ),
                   ),
                 ),
                 Container(
