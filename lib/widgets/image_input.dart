@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageInput extends StatefulWidget {
-  const ImageInput({super.key, required this.onSelectImage});
+  const ImageInput({
+    super.key,
+    this.currentImage,
+    required this.onSelectImage,
+  });
 
+  final File? currentImage;
   final void Function(File image) onSelectImage;
 
   @override
@@ -14,6 +19,12 @@ class ImageInput extends StatefulWidget {
 
 class _ImageInputState extends State<ImageInput> {
   File? _chosenImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _chosenImage = widget.currentImage;
+  }
 
   void _takePicture() async {
     final imagePicker = ImagePicker();
@@ -25,10 +36,6 @@ class _ImageInputState extends State<ImageInput> {
     if (image == null) return;
     setState(() => _chosenImage = File(image.path));
     widget.onSelectImage(_chosenImage!);
-  }
-
-  void _removeImage() {
-    setState(() => _chosenImage = null);
   }
 
   @override
@@ -52,30 +59,11 @@ class _ImageInputState extends State<ImageInput> {
     );
 
     if (_chosenImage != null) {
-      content = Stack(
-        children: [
-          Image.file(
-            _chosenImage!,
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: IconButton(
-              icon: Icon(Icons.delete),
-              color: theme.colorScheme.error,
-              style: IconButton.styleFrom(
-                shape: CircleBorder(),
-                backgroundColor: theme.colorScheme.surface.withValues(
-                  alpha: 0.5,
-                ),
-              ),
-              onPressed: _removeImage,
-            ),
-          ),
-        ],
+      content = Image.file(
+        _chosenImage!,
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
       );
     }
 

@@ -4,8 +4,6 @@ import 'package:flutter_favorite_places_app/helper/db_helper.dart';
 import 'package:flutter_favorite_places_app/models/place.dart';
 import 'package:flutter_favorite_places_app/models/place_location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as syspaths;
 
 class PlacesNotifier extends StateNotifier<List<Place>> {
   PlacesNotifier() : super(const []);
@@ -20,18 +18,31 @@ class PlacesNotifier extends StateNotifier<List<Place>> {
     required File image,
     required PlaceLocation location,
   }) async {
-    final appDir = await syspaths.getApplicationDocumentsDirectory();
-    final fileName = path.basename(image.path);
-    final copiedImage = await image.copy('${appDir.path}/$fileName.png');
-
     final newPlace = Place(
       title: title,
-      image: copiedImage,
+      image: image,
       location: location,
     );
 
-    await DbHelper.insert(newPlace);
+    DbHelper.insert(newPlace);
     state = [newPlace, ...state];
+  }
+
+  void updatePlace({
+    required String id,
+    required String title,
+    required File image,
+    required PlaceLocation location,
+  }) async {
+    final updPlace = Place(
+      id: id,
+      title: title,
+      image: image,
+      location: location,
+    );
+
+    DbHelper.update(updPlace);
+    state = state.map((place) => place.id == id ? updPlace : place).toList();
   }
 
   void removePlace(Place place) {

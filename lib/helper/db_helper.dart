@@ -59,6 +59,21 @@ class DbHelper {
     );
   }
 
+  static Future<void> update(Place place) async {
+    db.update(
+      'places',
+      {
+        'title': place.title,
+        'image': place.image.path,
+        'latitude': place.location.latitude,
+        'longitude': place.location.longitude,
+        'address': place.location.address,
+      },
+      where: 'id = ?',
+      whereArgs: [place.id],
+    );
+  }
+
   static Future<void> delete(String id) async {
     db.delete('places', where: 'id = ?', whereArgs: [id]);
   }

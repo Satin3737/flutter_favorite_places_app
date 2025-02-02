@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_favorite_places_app/helper/maps_helper.dart';
 import 'package:flutter_favorite_places_app/models/place_location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
     super.key,
-    this.location = const PlaceLocation(
-      latitude: 37.422,
-      longitude: -122.084,
-      address: 'Googleplex',
-    ),
+    this.location = MapsHelper.defaultLocation,
     this.isSelecting = true,
   });
 
@@ -21,13 +18,20 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  LatLng? _pickedLocation;
+  late LatLng _pickedLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    _pickedLocation = LatLng(
+      widget.location.latitude,
+      widget.location.longitude,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final isSelecting = widget.isSelecting;
-    final latitude = widget.location.latitude;
-    final longitude = widget.location.longitude;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,13 +49,13 @@ class _MapScreenState extends State<MapScreen> {
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: LatLng(latitude, longitude),
+          target: _pickedLocation,
           zoom: 16,
         ),
         markers: {
           Marker(
             markerId: const MarkerId('m1'),
-            position: _pickedLocation ?? LatLng(latitude, longitude),
+            position: _pickedLocation,
           ),
         },
         onTap: (latLng) {

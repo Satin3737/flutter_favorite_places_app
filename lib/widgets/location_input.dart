@@ -9,8 +9,13 @@ import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key, required this.onSelectLocation});
+  const LocationInput({
+    super.key,
+    this.currentLocation,
+    required this.onSelectLocation,
+  });
 
+  final PlaceLocation? currentLocation;
   final void Function(PlaceLocation location) onSelectLocation;
 
   @override
@@ -20,6 +25,12 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   PlaceLocation? _placeLocation;
   bool _isGettingLocation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _placeLocation = widget.currentLocation;
+  }
 
   void _savePlaceLocation(double latitude, double longitude) async {
     final url = MapsHelper.getMapApiUri(latitude, longitude);

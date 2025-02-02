@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_favorite_places_app/helper/db_helper.dart';
+import 'package:flutter_favorite_places_app/helper/path_helper.dart';
 import 'package:flutter_favorite_places_app/providers/places_provider.dart';
 import 'package:flutter_favorite_places_app/screens/add_place_screen.dart';
 import 'package:flutter_favorite_places_app/widgets/places_list.dart';
@@ -22,6 +23,7 @@ class _PlacesScreenState extends ConsumerState<PlacesScreen> {
   }
 
   Future<void> _initPlacesDb() async {
+    await PathHelper.init();
     await DbHelper.init();
     return ref.read(placesProvider.notifier).fetchPlaces();
   }

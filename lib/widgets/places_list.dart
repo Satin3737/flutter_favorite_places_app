@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_favorite_places_app/helper/db_helper.dart';
 import 'package:flutter_favorite_places_app/models/place.dart';
 import 'package:flutter_favorite_places_app/providers/places_provider.dart';
+import 'package:flutter_favorite_places_app/screens/add_place_screen.dart';
 import 'package:flutter_favorite_places_app/screens/place_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,14 @@ class PlacesList extends ConsumerWidget {
     void openPlaceDetails(Place place) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (ctx) => PlaceDetailsScreen(place: place)),
+      );
+    }
+
+    void onEdit(Place place) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => AddPlaceScreen(editPlace: place),
+        ),
       );
     }
 
@@ -60,8 +69,29 @@ class PlacesList extends ConsumerWidget {
       itemCount: places.length,
       itemBuilder: (ctx, index) => Dismissible(
         key: ValueKey(places[index]),
-        onDismissed: (_) => onRemove(places[index], index),
+        confirmDismiss: (direction) async {
+          if (direction == DismissDirection.startToEnd) {
+            onEdit(places[index]);
+            return false;
+          }
+          return true;
+        },
+        onDismissed: (direction) {
+          if (direction == DismissDirection.endToStart) {
+            onRemove(places[index], index);
+          }
+        },
         background: Container(
+          color: Colors.orangeAccent,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 16),
+          child: Icon(
+            Icons.edit,
+            size: 32,
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+        secondaryBackground: Container(
           color: Colors.redAccent,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 16),
